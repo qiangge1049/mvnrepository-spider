@@ -193,10 +193,13 @@ class Artifact:
             temp = tds[2].text.split('»')
             dependency_group_id = temp[0].strip()
             dependency_artifact_id = temp[1].strip()
-            optional = True if tds[2].span else False
-            dependency_version = tds[3]
-            if dependency_version:
-                dependency_version = dependency_version.text.strip()
+            dependency_version = tds[3].strip()
+            optional = False
+            if dependency_artifact_id.endswith(' (optional)'):
+                dependency_artifact_id = dependency_artifact_id[:-10].strip()
+                optional = True
+            if dependency_version == '':
+                dependency_version = None
             dependency = Dependency(dependency_group_id, dependency_artifact_id, dependency_version, scope, optional)
             self.__dependencies.append(dependency)
 

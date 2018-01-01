@@ -98,6 +98,12 @@ def fill_db(location, artifact):
                             'VALUES (%s, %s, %s, %s, %s)',
                             (location[0], index_id, None, None, None)
                         )
+                for lic in artifact.licenses:
+                    cur.execute(
+                        'INSERT INTO m2_license(index_id, license) '
+                        'VALUES (%s, %s)',
+                        (location[0], lic)
+                    )
         conn.commit()
     except:
         conn.rollback()
