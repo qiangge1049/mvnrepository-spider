@@ -65,11 +65,11 @@ def fill_db(location, artifact):
     try:
         with conn.cursor() as cur:
             cur.execute(
-                'INSERT INTO m2_package(index_id, name, description, home_page, license, organization, date) '
-                'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                'INSERT INTO m2_package(index_id, name, description, home_page, organization, date) '
+                'VALUES (%s, %s, %s, %s, %s, %s)',
                 (
-                    location[0], artifact.name, artifact.description, artifact.home_page,
-                    ','.join(artifact.licenses), artifact.organization, artifact.date
+                    location[0], artifact.name, artifact.description,
+                    artifact.home_page, artifact.organization, artifact.date
                 )
             )
             for dependency in artifact.dependencies:
