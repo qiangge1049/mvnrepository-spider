@@ -81,22 +81,29 @@ def fill_db(location, artifact):
                     )
                 else:
                     cur.execute(
-                        'SELECT id FROM m2_index WHERE group_id = %s AND artifact_id = %s AND version = %s',
+                        'SELECT id '
+                        'FROM m2_index '
+                        'WHERE group_id = %s AND artifact_id = %s AND version = %s',
                         (dependency.group_id, dependency.artifact_id, dependency.version)
                     )
                     d = cur.fetchone()
                     if d is None:
                         cur.execute(
-                            'INSERT INTO m2_dependency(index_id, dependency_index_id, group_id, artifact_id, version) '
-                            'VALUES (%s, %s, %s, %s, %s)',
-                            (location[0], None, dependency.group_id, dependency.artifact_id, dependency.version)
+                            'INSERT INTO m2_dependency'
+                            '(index_id, dependency_index_id, group_id, artifact_id, version, scope) '
+                            'VALUES (%s, %s, %s, %s, %s, %s)',
+                            (
+                                location[0], None, dependency.group_id, dependency.artifact_id,
+                                dependency.version, dependency.scope
+                            )
                         )
                     else:
                         index_id = d[0]
                         cur.execute(
-                            'INSERT INTO m2_dependency(index_id, dependency_index_id, group_id, artifact_id, version) '
-                            'VALUES (%s, %s, %s, %s, %s)',
-                            (location[0], index_id, None, None, None)
+                            'INSERT INTO m2_dependency'
+                            '(index_id, dependency_index_id, group_id, artifact_id, version, scope) '
+                            'VALUES (%s, %s, %s, %s, %s, %s)',
+                            (location[0], index_id, None, None, None, dependency.scope)
                         )
                 for lic in artifact.licenses:
                     cur.execute(
